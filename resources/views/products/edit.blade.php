@@ -8,7 +8,9 @@
         <form class="form" action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-
+            <div class="form-row">
+                <label class="form-label">商品情報ID：{{ $product->id }}</label>
+            </div>
             <div class="form-row">
                 <label class="form-label">商品画像：</label>
                 <div>

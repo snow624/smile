@@ -5,7 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-//  /products のところに来たらProductControllerが「商品一覧・新規登録・編集・削除」など全部やってくれる
+//  /products のところに来たらProductControllerが「・新規登録・編集・削除」など全部やってくれる
 // Route::resource('products',〜はproductsっていう商品ページの全部の道を一気に作る
 // ->middleware('auth') はちゃんとログインしてる人しか見れない
 Route::resource('products', ProductController::class)->middleware('auth');
@@ -32,16 +32,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+
+
 // ログイン」や「新規登録」のルールが書かれた別の地図（auth.php）を読み込む。
 require __DIR__.'/auth.php';
 
 // MEMO
-// 🏠 / ─→ products.index  (ProductController) ─→ 商品一覧の画面
+// 🏠 / ─→ products.index  (ProductController) ─→ の画面
 // 🔑 /login  ─→ Auth\AuthenticatedSessionController@create ─→ ログイン画面
 // 🧑 /register  ─→ Auth\RegisteredUserController@create  ─→ 新規登録画面
 
 // 商品周り（全てログイン必須）
-// GET    /products              ─→ index   ─→ 商品一覧
+// GET    /products              ─→ index   ─→ 
 // GET    /products/create       ─→ create  ─→ 新規登録フォーム
 // POST   /products              ─→ store   ─→ 登録処理(保存)
 // GET    /products/{id}         ─→ show    ─→ 詳細画面

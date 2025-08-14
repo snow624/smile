@@ -3,12 +3,12 @@
 
 <!-- layouts.app という共通レイアウトを使う宣言 -->
 @extends('layouts.app')
-<!-- ページの <title> に「商品一覧」が入る -->
-@section('title', '商品一覧')
-<!-- レイアウト側で @yield('heading') を呼び出すと「商品一覧画面」が表示される -->
+<!-- ページの <title> に「」が入る -->
+@section('title', '')
+<!-- レイアウト側で @yield('heading') を呼び出すと「画面」が表示される -->
 @section('heading', '商品一覧画面')
 
-<!-- ここからが商品一覧ページの中身 -->
+<!-- ここからがページの中身 -->
 @section('content')
 <!-- 検索フォーム -->
     <form method="GET" action="{{ route('products.index') }}" >
@@ -49,7 +49,7 @@
               @foreach ($products as $index => $product)
               <!-- id が奇数の場合に is-odd クラスが付き -->
               <tr class=is-odd"{{ $product->id % 2 === 1 ? 'is-odd' : '' }}">
-                  <td>{{ $products->firstItem() + $index }}</td>
+                  <td>{{ $product->id }}</td>
                   <td>
                   <!-- 商品画像があれば表示、なければ - -->
                     @if ($product->image_path)

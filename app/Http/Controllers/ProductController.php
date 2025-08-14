@@ -71,7 +71,7 @@ class ProductController extends Controller
     {
         return view('products.show', compact('product'));
     }
-    
+        
     // 編集画面の表示（既存の商品を編集するためのフォームを表示）
 public function edit(Product $product)
 {
