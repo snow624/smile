@@ -1,11 +1,41 @@
-@import 'tailwindcss';
+.product-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+.product-detail-table th,
+.product-detail-table td {
+    border: 1px solid #999;
+    padding: 10px;
+    text-align: left;
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+.product-detail-table th {
+    background-color: #f0f0f0;
+    width: 150px;
+}
+
+.btn-area {
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.btn-detail {
+    background-color: skyblue;
+    color: black;
+    text-decoration: none;
+}
+
+.btn-back {
+    background-color: gray;
+    color: white;
+    text-decoration: none;
 }
