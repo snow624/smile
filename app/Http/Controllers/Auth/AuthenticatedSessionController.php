@@ -29,10 +29,10 @@ class AuthenticatedSessionController extends Controller
         ]);
 
         // Auth::attempt() で、データベースのユーザー情報と一致するか確認。
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             // 一致したらセッション（ログイン状態）を新しく作り直す→/products に移動する（商品一覧ページへ）
-            return redirect()->route('products.index');
+            return redirect()->intended(route('products.index'));
         }
 
         // 一致しなければ認証に失敗しましたとエラーを出して、メール入力欄だけ残したまま元の画面に戻る。
