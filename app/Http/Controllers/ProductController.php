@@ -117,6 +117,7 @@ public function update(Request $request, Product $product)
         $validated['image_path'] = $path;
     }
 
+    
     // データベースの商品情報を更新
     $product->update($validated);
 
