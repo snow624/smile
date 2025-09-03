@@ -1,5 +1,5 @@
 /* =========================================================
-   Design System (共通変数)
+   Design System　！定義！
 ========================================================= */
 :root {
     --font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans JP", sans-serif;
@@ -9,18 +9,14 @@
     --border: #d0d0d0;
 
     --primary: #ff9800;
-    /* オレンジ */
     --primary-contrast: #fff;
     --secondary: #87ceeb;
-    /* スカイブルー */
     --secondary-text: #000;
     --danger: #e53935;
-    /* 赤 */
     --danger-contrast: #fff;
 
     --table-header: #eee;
     --row-alt: #f7f7f7;
-    /* 交互行背景 */
 
     --radius-sm: 4px;
     --radius-md: 8px;
@@ -34,16 +30,16 @@
 }
 
 /* =========================================================
-   Base
-========================================================= */
+     Base & Layout
+  ========================================================= */
 * {
-    box-sizing: border-box;
+    box-sizing: border-box
 }
 
 html,
 body {
     margin: 0;
-    padding: 0;
+    padding: 0
 }
 
 body {
@@ -53,30 +49,27 @@ body {
     line-height: 1.6;
 }
 
-/* レイアウト共通 */
 .container {
     max-width: 960px;
     margin: 0 auto;
-    padding: var(--space-5) var(--space-4);
+    padding: var(--space-5) var(--space-4)
 }
 
 header.site-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--space-4);
+    margin-bottom: var(--space-4)
 }
 
 .site-title {
     margin: 0;
-    font-size: 28px;
+    font-size: 28px
 }
 
-
-
 /* =========================================================
-   Buttons
-========================================================= */
+     Buttons
+  ========================================================= */
 .btn {
     display: inline-block;
     padding: 8px 20px;
@@ -91,72 +84,77 @@ header.site-header {
     margin: 2px;
 }
 
-/* 検索 */
-.btn-1 {
-    border: 1px solid #000;
-    color: #000;
-    background-color: #FFFFFF;
-}
-
-.btn-flex {
-    display: flex;
-}
-
-/* 削除 */
-.btn-3 {
-    color: #000;
-    background-color: #fa8d8d;
-    border-radius: var(--radius-pill);
+.btn:hover {
+    opacity: .9
 }
 
 .btn:disabled {
     opacity: .6;
-    cursor: not-allowed;
-}
-
-.btn:hover {
-    opacity: .9;
+    cursor: not-allowed
 }
 
 .btn-primary {
     background: var(--primary);
     color: var(--primary-contrast);
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-pill)
 }
 
 .btn-secondary {
     background: var(--secondary);
     color: var(--secondary-text);
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-pill)
 }
 
 .btn-danger {
     background: var(--danger);
-    color: var(--danger-contrast);
+    color: var(--danger-contrast)
 }
 
-/* 新規登録ボタン（一覧画面のリンク用） */
-.btn-new {
-    composes: btn btn-primary;
+.btn-1 {
+    background: #fff;
+    color: #000;
+    border: 1px solid #000
 }
 
-/* CSS Modules風メモ(実体は下で再宣言) */
+/* 検索ボタン */
+.btn-2 {
+    background: #92deff;
+    color: #000;
+    border-radius: var(--radius-pill)
+}
+
+/* 詳細ボタン */
+.btn-3 {
+    background: #fa8d8d;
+    color: #000;
+    border-radius: var(--radius-pill)
+}
+
+/* 削除ボタン */
+
 .btn-new {
+    /* 一覧の新規登録リンク用 */
     display: inline-block;
     background: var(--primary);
     color: var(--primary-contrast);
-    padding: var(--space-2) var(--space-3);
+    padding: 6px 25px;
     border-radius: var(--radius-pill);
 }
 
+.btn-flex {
+    display: flex;
+    gap: var(--space-2);
+    align-items: center
+}
+
 /* =========================================================
-   Tables（一覧）
-========================================================= */
+     Tables（一覧）
+  ========================================================= */
 .table {
-    /* width: 100%; */
     border-collapse: collapse;
     margin-top: var(--space-3);
     table-layout: fixed;
+    width: 100%
 }
 
 .table th,
@@ -164,41 +162,39 @@ header.site-header {
     border: 1px solid var(--border);
     padding: var(--space-2);
     text-align: center;
-    word-break: break-word;
+    word-break: break-word
 }
 
 .table th {
-    background: var(--table-header);
+    background: var(--table-header)
 }
 
-/* 交互行（見た目の読みやすさ） */
 .table tbody tr:nth-child(odd) {
-    background: var(--row-alt);
+    background: var(--row-alt)
 }
 
-/* IDが奇数の行を薄いグレーにしたい場合は
-   Bladeで <tr class="is-odd"> を付けて、このクラスで色を当てる */
+/* 交互行 */
 .table tbody tr.is-odd {
-    background: var(--row-alt);
+    background: var(--row-alt)
 }
 
-/* 画像セル */
+/* ID奇数に付ける場合用 */
 .table .thumb {
     width: 50px;
     height: 50px;
     object-fit: cover;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-sm)
 }
 
 /* =========================================================
-   Forms
-========================================================= */
+     Forms（共通）
+  ========================================================= */
 .form {
     border: 1px solid var(--border);
     padding: var(--space-4);
     max-width: 520px;
     background: #fff;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-md)
 }
 
 .form-row {
@@ -206,11 +202,14 @@ header.site-header {
     align-items: center;
     gap: 12px;
     margin-bottom: var(--space-3);
+    width: 100%
 }
 
 .form-label {
-    width: 140px;
+    width: 160px;
     text-align: left;
+    font-weight: 600;
+    text-wrap: none
 }
 
 .form-input,
@@ -221,68 +220,73 @@ header.site-header {
     padding: 8px;
     border: 1px solid #bbb;
     border-radius: var(--radius-sm);
-    font-size: 14px;
+    font-size: 14px
 }
 
 .form-textarea {
-    resize: vertical;
+    resize: vertical
 }
 
 .form-actions {
     display: flex;
     gap: var(--space-3);
-    margin-top: var(--space-4);
+    margin-top: var(--space-4)
 }
 
 .keyword {
     padding: 8px;
     margin: 5px;
-    width: 250px;
+    width: 250px
 }
 
-/* 必須マーク */
 .required {
-    color: #d11;
+    color: #d11
 }
 
 /* =========================================================
-   Alerts（バリデーション等）
-========================================================= */
+     Alerts（バリデーション）
+  ========================================================= */
 .alert {
     border-radius: var(--radius-sm);
     padding: var(--space-2) var(--space-3);
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-3)
 }
 
 .alert-danger {
     background: #ffe8e8;
     border: 1px solid #f1b3b3;
-    color: #a40000;
+    color: #a40000
 }
 
 .alert-list {
     margin: 0;
-    padding-left: 20px;
+    padding-left: 20px
 }
 
 .alert-item {
-    line-height: 1.6;
+    line-height: 1.6
 }
 
 /* =========================================================
-   Auth Pages（ログイン/新規登録など）
-========================================================= */
+     Auth Pages（ログイン/新規登録）
+  ========================================================= */
 .auth {
-    text-align: center;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: var(--space-5);
+    background: #fff;
+    border-radius: var(--radius-md);
+    text-align: center
 }
 
-.auth h1 {
-    font-size: 28px;
-    margin-bottom: var(--space-4);
+.auth-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: var(--space-4)
 }
 
 .auth .field {
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-3)
 }
 
 .auth .input {
@@ -293,44 +297,21 @@ header.site-header {
     border: 1px solid #bbb;
     border-radius: var(--radius-sm);
     display: block;
-    margin: 0 auto;
+    margin: 0 auto
 }
 
 .auth .actions {
     display: flex;
     justify-content: center;
     gap: var(--space-4);
-    margin-top: var(--space-3);
+    margin-top: var(--space-3)
 }
 
 /* =========================================================
-   Utilities
-========================================================= */
-.text-muted {
-    color: var(--muted-text);
-}
-
-.mt-2 {
-    margin-top: var(--space-2);
-}
-
-.mt-3 {
-    margin-top: var(--space-3);
-}
-
-.mt-4 {
-    margin-top: var(--space-4);
-}
-
-.center {
-    text-align: center;
-}
-
-/* ============================
-   Product Edit (商品編集)
-============================ */
+     Product Edit（商品編集）
+  ========================================================= */
 .product-edit .form {
-    max-width: 560px;
+    max-width: 560px
 }
 
 .product-edit .thumb-large {
@@ -341,102 +322,163 @@ header.site-header {
     border: 1px solid var(--border);
     background: #fff;
     display: block;
-    margin-bottom: var(--space-2);
+    margin-bottom: var(--space-2)
 }
 
-/* ボタン（既存のデザインに合わせる） */
 .btn-detail {
-    /* 「更新」ボタン用 */
     background: var(--primary);
     color: var(--primary-contrast);
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-pill)
 }
 
 .btn-back {
-    /* 「戻る」リンク用 */
     background: var(--secondary);
     color: var(--secondary-text);
+    border-radius: var(--radius-pill)
+}
+
+/* =========================================================
+     Utilities
+  ========================================================= */
+.text-muted {
+    color: var(--muted-text)
+}
+
+.mt-2 {
+    margin-top: var(--space-2)
+}
+
+.mt-3 {
+    margin-top: var(--space-3)
+}
+
+.mt-4 {
+    margin-top: var(--space-4)
+}
+
+.center {
+    text-align: center
+}
+
+/* テーブルツールバー（新規登録ボタン） */
+.table-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-2);
+    margin-bottom: var(--space-2);
+}
+
+/* テーブルは自動レイアウトにしてセル幅を内容に合わせる */
+.table {
+    table-layout: auto;
+}
+
+/* アクション列のレイアウト */
+.col-actions {
+    width: 220px;
+}
+
+/* 余裕ある固定幅（お好みで） */
+.table td.actions {
+    vertical-align: middle;
+}
+
+/* ボタン群をセル内で整列・折返し */
+.action-buttons {
+    display: flex;
+    gap: 3px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    /* 画面が狭い時は折り返す */
+    padding: 6px 10px;
+}
+
+/* テーブル内ボタンは気持ち小さめに */
+.table .btn {
+    padding: 6px 25px;
+    border-radius: var(--radius-pill);
+    font-size: 16px;
+}
+
+/* フォーム（削除）も高さが崩れないようにリセット */
+.action-buttons form {
+    margin: 0;
+}
+
+/* すべての「テーブル内アクションボタン」を同じ高さに */
+.btn-action {
+    display: inline-flex;
+    /* a でも button でも中央揃えOK */
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    /* ← 統一したい高さ */
+    padding: 0 18px;
+    /* 横だけ余白 */
+    line-height: 1;
+    /* 文字の行高でズレないように */
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* テーブル右上の「＋新規登録」も同じ高さに合わせる */
+.table-toolbar .btn-new {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 20px;
+    line-height: 1;
     border-radius: var(--radius-pill);
 }
 
-/* 汎用フォーム行（他画面と統一） */
-.form {
-    border: 1px solid var(--border);
-    padding: var(--space-4);
-    background: #fff;
-    border-radius: var(--radius-md);
+/* アクション列の並べ方と間隔（セル内の余白を一定に） */
+.col-actions {
+    width: 260px;
 }
 
-.form-row {
+/* 余裕ある幅（必要に応じて調整） */
+.table td.actions {
+    padding: 10px 12px;
+}
+
+.action-buttons {
     display: flex;
-    align-items: center;
     gap: 12px;
-    margin-bottom: var(--space-3);
-    width: 100%;
-
+    /* ボタン間のすき間を統一 */
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    /* 画面が狭い時は折り返し */
 }
 
-.form-label {
-    width: 160px;
-    text-align: left;
-    font-weight: 600;
-    text-wrap: none;
+.action-buttons form {
+    margin: 0;
 }
 
-.form-input,
-.form-select,
-.form-textarea {
-    flex: 1;
-    min-width: 0;
-    padding: 8px;
-    border: 1px solid #bbb;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-}
+/* form のデフォルト余白をリセット */
 
-.form-textarea {
-    resize: vertical;
-}
-
-.form-actions {
-    display: flex;
-    gap: var(--space-3);
-    margin-top: var(--space-3);
+/* 既存の色クラスをそのまま使いたい場合の組み合わせ */
+.btn-2.btn-action {
+    background: #92deff;
+    color: #000;
 }
 
 /* 詳細 */
-.btn-2 {
-    display: inline-block;
-    padding: 8px 20px;
-    border: 0;
-    border-radius: var(--radius-pill);
-    font-size: 14px;
-    cursor: pointer;
-    text-decoration: none;
-    line-height: 1.2;
-    transition: opacity .15s ease;
+.btn-secondary.btn-action {
+    background: var(--secondary);
+}
+
+.btn-3.btn-action {
+    background: #fa8d8d;
     color: #000;
-    margin: 2px;
+}
+
+.btn-4 {
+    background-color: #9ed585;
     color: #000;
-    background-color: #92deff;
 }
 
-/* ============================
-   Auth Pages（ログイン/登録）
-============================ */
-.auth {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: var(--space-5);
-    background: #fff;
-    border-radius: var(--radius-md);
-}
-
-.auth-title {
-    font-size: 24px;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: var(--space-4);
-}
-
-/* フォームは既存の .form, .form-row, .form-label, .form-input, .form-actions を利用 */
+/* 削除 */

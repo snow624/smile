@@ -55,11 +55,13 @@
                   <td>{{ $product->id }}</td>
                   <td>
                   <!-- 商品画像があれば表示、なければ - -->
-                    @if ($product->image_path)
-                      <img class="thumb" src="{{ asset('storage/' . $product->image_path) }}" alt="">
-                    @else
-                   -
-                    @endif
+
+@if ($product->image_path)
+  <img class="thumb" src="{{ Storage::url($product->image_path) }}" alt="">
+@else
+  -
+@endif
+
                   </td>
 
                         <!-- 商品名、価格、在庫数、メーカー名を表示 -->
@@ -70,9 +72,9 @@
 
                         <td>
                             
-                            <div class=btn-flex>
+                            <div  class="actions">
                                 <!-- 詳細ボタン -->
-                                <a href="{{ route('products.show', $product) }}" class="btn btn-2 btn-detail">詳細</a>
+                                <a href="{{ route('products.show', $product) }}" class="btn btn-detail btn-4">詳細</a>
                                 <a href="{{ route('products.edit', $product) }}" class="btn btn-2">編集</a>
 
                                 <!-- 削除ボタン -->

@@ -24,13 +24,23 @@ class ProductController extends Controller
 
     // メーカー名があればさらに絞り込み
     if ($request->filled('company_id')) {
-        $query->where('company_id', $request->company_id);
+        // ProductController@index
+$query = Product::with('company')
+->keyword($request->keyword)
+->company($request->company_id);
+
+$products = $query->paginate(10)->withQueryString();
+
     }
     // 1ページに10件だけ表示（ページ送り付き）
     $products = $query->paginate(10)->withQueryString();
 
     // products.index というビューに結果を渡す
-    $companies = Company::orderBy('company_name')->get();
+    // ProductController@index / create など
+$companies = \App\Models\Company::selectRaw('MIN(id) as id, company_name')
+->groupBy('company_name')
+->orderBy('company_name')
+->get();
 
     return view('products.index', compact('products', 'companies'));
 }
@@ -58,10 +68,13 @@ class ProductController extends Controller
         
 
         // 画像があれば保存（storage/app/public/images）
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('images', 'public');
-            $validated['image_path'] = $path;
-        }
+        // 保存時
+if ($request->hasFile('image')) {
+    // storage/app/public/products/xxxx.jpg に保存
+    $path = $request->file('image')->store('products', 'public');
+    $validated['image_path'] = $path;   // ← DB には 'products/xxxx.jpg' を保存
+}
+
 
         // 新しい商品をデータベースに登録
         Product::create($validated);
