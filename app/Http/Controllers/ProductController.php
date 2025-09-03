@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Company;
 
 // 「ProductController というクラスを作って、Controller という親クラスの機能を引き継ぐ」という。extends→意味継承
 class ProductController extends Controller
@@ -14,29 +15,32 @@ class ProductController extends Controller
     public function index(Request $request)
 {
     // 商品データを取ってくるために準備（Product::query()）
-    $query = Product::query();
+    $query = Product::query()->with('company');// 会社を同時読み込み
 
     // 検索ワードがあれば商品名で絞り込み
     if ($request->filled('keyword')) {
-        $query->where('product_name', 'like', '%' . $request->keyword . '%');
+        $query->where('product_name', 'like', '%'.$request->keyword.'%');
     }
 
     // メーカー名があればさらに絞り込み
-    if ($request->filled('maker_name')) {
-        $query->where('maker_name', $request->maker_name);
+    if ($request->filled('company_id')) {
+        $query->where('company_id', $request->company_id);
     }
     // 1ページに10件だけ表示（ページ送り付き）
-    $products = $query->paginate(10); 
+    $products = $query->paginate(10)->withQueryString();
 
     // products.index というビューに結果を渡す
-    return view('products.index', compact('products'));
+    $companies = Company::orderBy('company_name')->get();
+
+    return view('products.index', compact('products', 'companies'));
 }
 
     // 新規作成画面を表示
     // 新しい商品を登録するための入力フォームを表示するだけ。データはまだ触らない
     public function create()
     {
-        return view('products.create');
+        $companies = Company::orderBy('company_name')->get();
+    return view('products.create', compact('companies'));
     }    
 
     // 登録処理を行う
@@ -44,13 +48,14 @@ class ProductController extends Controller
     {
         // 入力チェック（必須項目や数値チェック）
         $validated = $request->validate([
-            'product_name' => 'required',
-            'maker_name' => 'required',
-            'price' => 'required|integer',
-            'stock' => 'required|integer',
-            'comment' => 'nullable',
-            'image' => 'nullable|image',
+            'company_id'   => ['required','exists:companies,id'],
+            'product_name' => ['required','string'],
+            'price'        => ['required','integer'],
+            'stock'        => ['required','integer'],
+            'comment'      => ['nullable','string'],
+            'image'        => ['nullable','image'],
         ]);
+        
 
         // 画像があれば保存（storage/app/public/images）
         if ($request->hasFile('image')) {
@@ -75,7 +80,8 @@ class ProductController extends Controller
     // 編集画面の表示（既存の商品を編集するためのフォームを表示）
 public function edit(Product $product)
 {
-    return view('products.edit', compact('product'));
+    $companies = Company::orderBy('company_name')->get();
+    return view('products.edit', compact('product','companies'));
 }
 
 // 更新処理
@@ -83,13 +89,14 @@ public function update(Request $request, Product $product)
 {
     // 入力チェック
     $validated = $request->validate([
-        'product_name' => 'required',
-        'maker_name' => 'required',
-        'price' => 'required|integer',
-        'stock' => 'required|integer',
-        'comment' => 'nullable',
-        'image' => 'nullable|image',
+        'company_id'   => ['required','exists:companies,id'],
+        'product_name' => ['required','string'],
+        'price'        => ['required','integer'],
+        'stock'        => ['required','integer'],
+        'comment'      => ['nullable','string'],
+        'image'        => ['nullable','image'],
     ]);
+    
 
     // 新しい画像があれば保存して差し替え
     if ($request->hasFile('image')) {

@@ -33,15 +33,16 @@
         </div>
 
         <div class="form-row">
-            <label for="maker_name" class="form-label">
-                メーカー名 <span class="required">*</span>
-            </label>
-            <select id="maker_name" class="form-select" name="maker_name" required>
-                <option value="">▼</option>
-                <option value="Coca-Cola" {{ old('maker_name') === 'Coca-Cola' ? 'selected' : '' }}>Coca-Cola</option>
-                <option value="サントリー" {{ old('maker_name') === 'サントリー' ? 'selected' : '' }}>サントリー</option>
-                <option value="キリン" {{ old('maker_name') === 'キリン' ? 'selected' : '' }}>キリン</option>
-            </select>
+        <label for="company_id" class="form-label">メーカー名 <span class="required">*</span></label>
+<select id="company_id" name="company_id" required>
+    <option value="">メーカーを選択</option>
+    @foreach($companies as $company)
+        <option value="{{ $company->id }}"
+            {{ (string)old('company_id') === (string)$company->id ? 'selected' : '' }}>
+            {{ $company->company_name }}
+        </option>
+    @endforeach
+</select>
         </div>
 
         <div class="form-row">

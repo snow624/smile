@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html lang="ja">
 
+<!-- {{-- ← Bladeはレイアウトを使うとき、最上段に @extends を書く。<!DOCTYPE html> などはレイアウト側に任せる --}} -->
 <!-- layouts.app という共通レイアウトを使う宣言 -->
 @extends('layouts.app')
 <!-- ページの <title> に「」が入る -->
@@ -11,18 +10,21 @@
 <!-- ここからがページの中身 -->
 @section('content')
 <!-- 検索フォーム -->
-    <form method="GET" action="{{ route('products.index') }}" >
-        <input type="text" class=keyword name="keyword" placeholder="検索キーワード" value="{{ request('keyword') }}">
+<form method="GET" action="{{ route('products.index') }}" class="search">
+  <input type="text" name="keyword" placeholder="検索キーワード"
+         value="{{ request('keyword') }}" class=form-label>
         <!-- value="{{ request('keyword') }}" で、検索後も入力値を保持 -->
 
         <!-- メーカー名のプルダウン -->
-        <select name="maker_name" class=keyword>
-            <option value="">メーカー名</option>
-            <!-- $products の中から maker_name を取り出して .unique() で重複削除。選択中のメーカーは selected が付く -->
-            @foreach($products->pluck('maker_name')->unique() as $maker)
-                <option value="{{ $maker }}" {{ request('maker_name') == $maker ? 'selected' : '' }}>{{ $maker }}</option>
-            @endforeach
-        </select>
+        <select name="company_id" class=form-label>
+    <option value="" >メーカーを選択</option>
+            <!-- $products の中から company_id を取り出して .unique() で重複削除。選択中のメーカーは selected が付く -->
+            @foreach($companies as $company)
+    <option value="{{ $company->id }}" {{ (string)request('company_id') === (string)$company->id ? 'selected' : '' }}>
+      {{ $company->company_name }}
+    </option>
+  @endforeach
+</select>
 <!-- 検索ボタン -->
         <button type="submit" class="btn btn-1">検索</button>
     </form>
@@ -30,6 +32,7 @@
     <!-- $products が空ならメッセージ表示。商品があれば次のテーブル部分を表示 -->
     @if ($products->isEmpty())
         <p>商品がありません。</p>
+        <a href="{{ route('products.create') }}" class="btn btn-new">＋ 新規登録</a></th>
     @else
     <!-- ヘッダー行は固定。 -->
         <table class="table">
@@ -63,12 +66,15 @@
                         <td>{{ $product->product_name }}</td>
                         <td>¥{{ $product->price }}</td>
                         <td>{{ $product->stock }}</td>
-                        <td>{{ $product->maker_name }}</td>
+                        <td>{{ $product->company->company_name ?? '-' }}</td>
+
                         <td>
                             
                             <div class=btn-flex>
                                 <!-- 詳細ボタン -->
-                                <a href="{{ route('products.edit', $product) }}" class="btn btn-2 btn-detail">詳細</a>
+                                <a href="{{ route('products.show', $product) }}" class="btn btn-2 btn-detail">詳細</a>
+                                <a href="{{ route('products.edit', $product) }}" class="btn btn-2">編集</a>
+
                                 <!-- 削除ボタン -->
                             <form method="POST" action="{{ route('products.destroy', $product) }}" style="display:inline;">
                                 @csrf @method('DELETE')

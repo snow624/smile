@@ -8,9 +8,12 @@
         <form class="form" action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+
             <div class="form-row">
-                <label class="form-label">商品情報ID：{{ $product->id }}</label>
+                <label class="form-label">商品情報ID：</label>
+                <div>{{ $product->id }}</div>
             </div>
+
             <div class="form-row">
                 <label class="form-label">商品画像：</label>
                 <div>
@@ -27,10 +30,18 @@
                        value="{{ old('product_name', $product->product_name) }}" required>
             </div>
 
+            {{-- ★ ここを company_id のセレクトに変更 --}}
             <div class="form-row">
-                <label for="maker_name" class="form-label">メーカー名：</label>
-                <input id="maker_name" class="form-input" type="text" name="maker_name"
-                       value="{{ old('maker_name', $product->maker_name) }}" required>
+                <label for="company_id" class="form-label">メーカー名：</label>
+                <select id="company_id" name="company_id" class="form-select" required>
+                    <option value="">メーカーを選択</option>
+                    @foreach ($companies as $company)
+                        <option value="{{ $company->id }}"
+                            {{ (string)old('company_id', (string)$product->company_id) === (string)$company->id ? 'selected' : '' }}>
+                            {{ $company->company_name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="form-row">

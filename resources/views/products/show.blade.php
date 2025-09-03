@@ -4,13 +4,14 @@
 @section('heading', '商品情報詳細画面')
 
 @section('content')
-    <table class="product-detail-table">
-        <tr>
-            <th>ID</th>
+<div class="form">
+    <table>
+        <tr class="form-row">
+            <th class="form-label">ID</th>
             <td>{{ $product->id }}</td>
         </tr>
-        <tr>
-            <th>商品画像</th>
+        <tr class="form-row">
+            <th class="form-label">商品画像</th>
             <td>
                 @if ($product->image_path)
                     <img src="{{ asset('storage/' . $product->image_path) }}" width="100">
@@ -19,24 +20,27 @@
                 @endif
             </td>
         </tr>
-        <tr>
-            <th>商品名</th>
+        <tr class="form-row">
+            <th class="form-label">商品名</th>
             <td>{{ $product->product_name }}</td>
         </tr>
-        <tr>
-            <th>価格</th>
+        <tr class="form-row">
+            <th class="form-label">価格</th>
             <td>¥{{ number_format($product->price) }}</td>
         </tr>
-        <tr>
-            <th>在庫数</th>
+        <tr class="form-row">
+            <th class="form-label">在庫数</th>
             <td>{{ $product->stock }}</td>
         </tr>
-        <tr>
-            <th>メーカー</th>
-            <td>{{ $product->maker_name }}</td>
+
+        <tr class="form-row">
+            <th class="form-label">メーカー</th>
+            <td>{{ $product->company->company_name ?? 'メーカー未設定' }}</td>
+       </tr>
+
         </tr>
-        <tr>
-            <th>コメント</th>
+        <tr class="form-row">
+            <th class="form-label">コメント</th>
             <td>{{ $product->comment }}</td>
         </tr>
     </table>
@@ -45,4 +49,5 @@
         <a href="{{ route('products.edit', $product) }}" class="btn btn-detail">編集</a>
         <a href="{{ route('products.index') }}" class="btn btn-back">一覧に戻る</a>
     </div>
+</div>
 @endsection
