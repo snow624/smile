@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Product extends Model
 {
@@ -34,6 +35,17 @@ public function scopeKeyword($q, ?string $kw) {
 }
 public function scopeCompany($q, ?int $companyId) {
     if (!empty($companyId)) $q->where('company_id', $companyId);
+}
+/** 一覧検索用スコープ */
+public function scopeFilter(Builder $q, array $filters): Builder
+{
+    return $q
+        ->when(!empty($filters['keyword']), function ($q) use ($filters) {
+            $q->where('product_name', 'like', '%'.$filters['keyword'].'%');
+        })
+        ->when(!empty($filters['company_id']), function ($q) use ($filters) {
+            $q->where('company_id', $filters['company_id']);
+        });
 }
 
 }
