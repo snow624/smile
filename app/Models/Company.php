@@ -14,3 +14,4 @@ class Company extends Model
         return static::orderBy('company_name')->get(['id','company_name']);
     }
 }
+

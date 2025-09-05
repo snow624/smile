@@ -1,5 +1,7 @@
 <?php
 
+// 商品登録と編集（商品登録、編集にバリデーションを追加して、オリジナルメッセージを表示）
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -52,4 +54,5 @@ class StoreProductRequest extends FormRequest
         ];
     }
 }
+
 
