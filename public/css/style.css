@@ -481,4 +481,8 @@ header.site-header {
     color: #000;
 }
 
-/* 削除 */
+.input-error {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #a40000;
+}
