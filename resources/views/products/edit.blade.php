@@ -4,7 +4,8 @@
 @section('heading', '商品編集画面')
 
 @section('content')
- @if ($errors->any())
+{{-- バリデーションエラー表示 --}}
+    @if ($errors->any())
   <div class="alert alert-danger" role="alert">
     <ul class="alert-list">
       @foreach ($errors->all() as $error)
@@ -12,26 +13,15 @@
       @endforeach
     </ul>
   </div>
- @endif
- 
+@endif
     <div class="product-edit">
     <form class="form" action="{{ route('products.update', $product) }}" method="POST" enctype="multipart/form-data">
   @csrf
   @method('PUT')
 
-  {{-- フォーム上部でエラー一覧 --}}
-  @if ($errors->any())
-    <div class="alert alert-danger" role="alert">
-      <ul class="alert-list">
-        @foreach ($errors->all() as $error)
-          <li class="alert-item">{{ $error }}</li>
-        @endforeach
-      </ul>
-    </div>
-  @endif
-
   <div class="form-row">
-    <label class="form-label">商品情報ID：{{ $product->id }}</label>
+    <label class="form-label">商品情報ID：</label>
+    <div>{{ $product->id }}</div>
   </div>
 
   <div class="form-row">

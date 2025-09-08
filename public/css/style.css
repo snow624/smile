@@ -481,8 +481,15 @@ header.site-header {
     color: #000;
 }
 
+/* エラー表示 */
 .input-error {
     margin-top: 6px;
-    font-size: 13px;
+    font-size: 12px;
+    color: #a40000;
+}
+
+.alert-danger {
+    background: #ffe8e8;
+    border: 1px solid #f1b3b3;
     color: #a40000;
 }
