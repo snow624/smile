@@ -13,7 +13,7 @@
         <td>{{ $product->stock }}</td>
         <td>{{ optional($product->company)->company_name }}</td>
         <td class="cell-actions">
-            <a href="{{ route('products.edit', $product) }}" class="btn btn-2">編集</a>
+            <a href="{{ route('products.show', $product) }}" class="btn btn-1">詳細</a>
             <button type="button" class="btn btn-3 btn-delete" data-id="{{ $product->id }}">削除</button>
         </td>
     </tr>
