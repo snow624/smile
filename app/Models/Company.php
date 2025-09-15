@@ -10,8 +10,9 @@ class Company extends Model
 
     /** プルダウン用（名前順） */
     public static function options()
-    {
-        return static::orderBy('company_name')->get(['id','company_name']);
-    }
+{
+    return static::orderBy('company_name')->get(['id','company_name']);
+}
+
 }
 

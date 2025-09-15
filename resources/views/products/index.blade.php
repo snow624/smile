@@ -1,98 +1,57 @@
-
-<!-- {{-- ← Bladeはレイアウトを使うとき、最上段に @extends を書く。<!DOCTYPE html> などはレイアウト側に任せる --}} -->
-<!-- layouts.app という共通レイアウトを使う宣言 -->
 @extends('layouts.app')
-<!-- ページの <title> に「」が入る -->
-@section('title', '')
-<!-- レイアウト側で @yield('heading') を呼び出すと「画面」が表示される -->
+@section('title', '商品一覧')
 @section('heading', '商品一覧画面')
 
-<!-- ここからがページの中身 -->
 @section('content')
-<!-- 検索フォーム -->
-<form method="GET" action="{{ route('products.index') }}" class="search">
-  <input type="text" name="keyword" placeholder="検索キーワード"
-         value="{{ request('keyword') }}" class=form-label>
-        <!-- value="{{ request('keyword') }}" で、検索後も入力値を保持 -->
+    <form id="search-form" class="search" method="GET" action="{{ route('products.index') }}"
+        data-search-url="{{ route('products.search') }}">
 
-        <!-- メーカー名のプルダウン -->
-        <select name="company_id" class=form-label>
-    <option value="" >メーカーを選択</option>
-            <!-- $products の中から company_id を取り出して .unique() で重複削除。選択中のメーカーは selected が付く -->
-            @foreach($companies as $company)
-    <option value="{{ $company->id }}" {{ (string)request('company_id') === (string)$company->id ? 'selected' : '' }}>
-      {{ $company->company_name }}
-    </option>
-  @endforeach
-</select>
-<!-- 検索ボタン -->
+        <input type="text" name="keyword" placeholder="検索キーワード" value="{{ request('keyword') }}" class="form-label">
+
+        <select name="company_id" class="form-label">
+            <option value="">メーカーを選択</option>
+            @foreach ($companies as $company)
+                <option value="{{ $company->id }}"
+                    {{ (string) request('company_id') === (string) $company->id ? 'selected' : '' }}>
+                    {{ $company->company_name }}
+                </option>
+            @endforeach
+        </select>
+
+        {{-- 価格範囲 --}}
+        <input type="number" name="price_min" placeholder="価格(下限)" value="{{ request('price_min') }}">
+        <input type="number" name="price_max" placeholder="価格(上限)" value="{{ request('price_max') }}">
+        <br>
+        {{-- 在庫範囲 --}}
+        <input type="number" name="stock_min" placeholder="在庫(下限)" value="{{ request('stock_min') }}">
+        <input type="number" name="stock_max" placeholder="在庫(上限)" value="{{ request('stock_max') }}">
+
+
+        {{-- ソート保持（初期は id/asc） --}}
+        <input type="hidden" name="sort" value="{{ request('sort', 'id') }}">
+        <input type="hidden" name="dir" value="{{ request('dir', 'asc') }}">
+
         <button type="submit" class="btn btn-1">検索</button>
     </form>
 
-    <!-- $products が空ならメッセージ表示。商品があれば次のテーブル部分を表示 -->
-    @if ($products->isEmpty())
-        <p>商品がありません。</p>
-        <a href="{{ route('products.create') }}" class="btn btn-new">＋ 新規登録</a></th>
-    @else
-    <!-- ヘッダー行は固定。 -->
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>商品画像</th>
-                    <th>商品名</th>
-                    <th>価格</th>
-                    <th>在庫数</th>
-                    <th>メーカー名</th>
-                    <th><!-- products.create ルート（商品新規登録画面）に移動 -->
-                    <a href="{{ route('products.create') }}" class="btn btn-new">＋ 新規登録</a></th>
-                </tr>
-            </thead>
-            <tbody>
-              @foreach ($products as $index => $product)
-              <!-- id が奇数の場合に is-odd クラスが付き -->
-              <tr class=is-odd"{{ $product->id % 2 === 1 ? 'is-odd' : '' }}">
-                  <td>{{ $product->id }}</td>
-                  <td>
-                  <!-- 商品画像があれば表示、なければ - -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th><button type="button" class="th-sort" data-sort="id">ID</button></th>
+                <th>商品画像</th>
+                <th><button type="button" class="th-sort" data-sort="product_name">商品名</button></th>
+                <th><button type="button" class="th-sort" data-sort="price">価格</button></th>
+                <th><button type="button" class="th-sort" data-sort="stock">在庫数</button></th>
+                <th>メーカー名</th>
+                <th><a href="{{ route('products.create') }}" class="btn btn-new">＋ 新規登録</a></th>
+            </tr>
+        </thead>
+        <tbody id="list-body">
+            @include('products.partials.table', ['products' => $products])
+        </tbody>
+    </table>
 
-@if ($product->image_path)
-  <img class="thumb" src="{{ Storage::url($product->image_path) }}" alt="">
-@else
-  -
-@endif
-
-                  </td>
-
-                        <!-- 商品名、価格、在庫数、メーカー名を表示 -->
-                        <td>{{ $product->product_name }}</td>
-                        <td>¥{{ $product->price }}</td>
-                        <td>{{ $product->stock }}</td>
-                        <td>{{ $product->company->company_name ?? '-' }}</td>
-
-                        <td>
-                            
-                            <div  class="actions">
-                                <!-- 詳細ボタン -->
-                                <a href="{{ route('products.show', $product) }}" class="btn btn-detail btn-4">詳細</a>
-                                <a href="{{ route('products.edit', $product) }}" class="btn btn-2">編集</a>
-
-                                <!-- 削除ボタン -->
-                            <form method="POST" action="{{ route('products.destroy', $product) }}" style="display:inline;">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-3 btn-delete" onclick="return confirm('削除しますか？')">削除</button>
-                            </form>
-                        </div>
-                            
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <!-- Laravelのページネーションリンクを自動生成 -->
+    <div id="paginator">
         {{ $products->links() }}
-    @endif
+    </div>
 @endsection
-</body>
-</html>
-

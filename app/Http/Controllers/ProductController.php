@@ -12,24 +12,89 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 
-// store/update のシグネチャを差し替え済み（上のBのサンプル参照）
-// $request->validated() でOK
-
-
-// 「ProductController というクラスを作って、Controller という親クラスの機能を引き継ぐ」という。extends→意味継承
 class ProductController extends Controller
 {
-    // 一覧
     public function index(Request $request)
+{
+    // デフォルトは id asc
+    $sort = $request->input('sort', 'id');
+    $dir  = $request->input('dir',  'asc');
+
+    $products = Product::with('company')
+        ->filter($request->all())
+        ->orderForList($sort, $dir)
+        ->paginate(10)
+        ->withQueryString();
+
+    $companies = Company::orderBy('company_name')->get();
+
+    return view('products.index', compact('products','companies'));
+}
+
+/** 非同期検索（部分HTMLを返す） */
+public function searchAjax(Request $request)
+{
+
+    $request->validate([
+        'keyword'    => ['nullable','string'],
+        'company_id' => ['nullable','integer'],
+        'price_min'  => ['nullable','integer'],
+        'price_max'  => ['nullable','integer'],
+        'stock_min'  => ['nullable','integer'],
+        'stock_max'  => ['nullable','integer'],
+        'sort'       => ['nullable','string'],
+        'dir'        => ['nullable','in:asc,desc'],
+        'page'       => ['nullable','integer'],
+    ]);
+// 追加チェック
+if ($request->filled('price_min') && $request->filled('price_max') && $request->price_min > $request->price_max) {
+    return back()->withErrors(['price_min' => '価格の下限は上限以下である必要があります'])->withInput();
+}
+if ($request->filled('stock_min') && $request->filled('stock_max') && $request->stock_min > $request->stock_max) {
+    return back()->withErrors(['stock_min' => '在庫の下限は上限以下である必要があります'])->withInput();
+}
+    // 許可するソート列のホワイトリスト
+    $sortable = ['id','product_name','price','stock'];
+    $sort = in_array($request->input('sort'), $sortable, true) ? $request->input('sort') : 'id';
+    $dir  = $request->input('dir', 'asc'); // ★デフォルト昇順
+
+    $q = Product::with('company')->filter($request->all())->orderForList($sort, $dir);
+
+    $products = $q->paginate(10)->withQueryString();
+
+    return response()->json([
+        'rows'  => view('products.partials.table', compact('products'))->render(),
+        'pager' => view('products.partials.pager', compact('products'))->render(),
+    ]);
+}
+
+// AJAX用：テーブルだけ返す
+public function search(Request $request)
+{
+    $products = Product::with('company')
+        ->filter($request->all())
+        ->orderForList($request->input('sort'), $request->input('dir'))
+        ->paginate(10)
+        ->withQueryString();
+
+    // tbody だけ返す
+    return view('products.partials.table', compact('products'))->render();
+}
+
+
+    // Ajax削除
+    public function ajaxDestroy(Product $product)
     {
-        $products = Product::with('company')
-            ->filter($request->only('keyword','company_id'))
-            ->paginate(10)
-            ->withQueryString();
-
-        $companies = Company::options();
-
-        return view('products.index', compact('products','companies'));
+        DB::beginTransaction();
+        try {
+            $product->delete();
+            DB::commit();
+            return response()->json(['ok'=>true]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            report($e);
+            return response()->json(['ok'=>false,'message'=>'削除に失敗しました。'], 500);
+        }
     }
 
     // 新規作成フォーム
@@ -116,26 +181,4 @@ class ProductController extends Controller
         }
     }
 }
-
-// MEMO
-
-// public function は、「このクラスの中に、みんなが呼び出せる動きを作りますよ」 という宣言。public はアクセス修飾子（外部からアクセスできる）。
-
-// | メソッド    | 役割          |
-// | ------- | ----------- |
-// | index   | 一覧を出す       |
-// | create  | 新規作成フォームを出す |
-// | store   | 新規商品を登録     |
-// | show    | 商品の詳細ページ    |
-// | edit    | 編集フォームを出す   |
-// | update  | 商品を更新       |
-// | destroy | 商品を削除       |
-
-// Laravelでは以下の名前のルールがある
-// index() = 一覧表示
-// create() = 新規作成画面表示
-// store() = 新規保存
-// edit() = 編集画面表示
-// update() = 更新処理
-// destroy() = 削除処理
 
