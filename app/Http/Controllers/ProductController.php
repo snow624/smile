@@ -1,6 +1,6 @@
 <?php
 
-// 「ProductController.php」商品の管理をする人（係員） みたいな存在。商品の一覧・登録・編集・削除などを全部担当
+// 商品の一覧・登録・編集・削除などを全部担当
 
 namespace App\Http\Controllers;
 
@@ -46,7 +46,7 @@ public function searchAjax(Request $request)
         'dir'        => ['nullable','in:asc,desc'],
         'page'       => ['nullable','integer'],
     ]);
-// 追加チェック
+// 追加チェック 価格 在庫
 if ($request->filled('price_min') && $request->filled('price_max') && $request->price_min > $request->price_max) {
     return back()->withErrors(['price_min' => '価格の下限は上限以下である必要があります'])->withInput();
 }
